@@ -3,7 +3,6 @@ package com.learning.student.exportservice.controller.api;
 import com.learning.student.exportservice.controller.model.StudentDto;
 import com.learning.student.exportservice.facade.ExportFacade;
 import com.learning.student.exportservice.integration.model.Student;
-import com.learning.student.exportservice.service.impl.ThymeleafService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -20,19 +19,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class ExportController {
 
     private final ExportFacade exportFacade;
-    private final ThymeleafService thymeleafService;
     private final ModelMapper modelMapper = new ModelMapper();
 
-    public ExportController(ExportFacade exportFacade, ThymeleafService thymeleafService) {
+    public ExportController(ExportFacade exportFacade) {
         this.exportFacade = exportFacade;
-        this.thymeleafService = thymeleafService;
     }
 
     @PostMapping("/student/{studentId}")
     public ResponseEntity<String> export(@RequestBody StudentDto studentDto, @PathVariable String studentId) {
         try {
-            String message = exportFacade.exportStudent(modelMapper.map(studentDto, Student.class), studentId);
-            return new ResponseEntity<>(message, HttpStatus.OK);
+            String path = exportFacade.exportStudent(modelMapper.map(studentDto, Student.class), studentId);
+            return new ResponseEntity<>("Student exported to path: " + path, HttpStatus.OK);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         }

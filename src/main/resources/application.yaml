@@ -2,3 +2,5 @@ server:
   servlet:
     contextPath: /api
   port: 8083
+file:
+  pathName: C:\Users\gabrielamaciac\Documents\GitHub\student-export
