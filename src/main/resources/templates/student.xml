@@ -1,0 +1,21 @@
+<student xmlns:th="http://www.w3.org/1999/XSL/Transform">
+    <firstName th:text="${student.firstName}"></firstName>
+    <lastName th:text="${student.lastName}"></lastName>
+    <cnp th:text="${student.cnp}"></cnp>
+    <dateOfBirth th:text="${student.dateOfBirth}"></dateOfBirth>
+    <address>
+        <street th:text="${student.address.street}"></street>
+        <number th:text="${student.address.number}"></number>
+        <city th:text="${student.address.city}"></city>
+        <country th:text="${student.address.country}"></country>
+    </address>
+    <error th:if="${student.grades.isEmpty()}">List of grades is empty</error>
+    <grades th:each="grade: ${student.grades}">
+        <subject th:text="${grade.subject}"></subject>
+        <error th:if="${grade.marks.isEmpty()}">List of grade marks is empty</error>
+        <marks th:each="mark: ${grade.marks}">
+            <dateReceived th:text="${mark.dateReceived}"></dateReceived>
+            <mark th:text="${mark.mark}"></mark>
+        </marks>
+    </grades>
+</student>
