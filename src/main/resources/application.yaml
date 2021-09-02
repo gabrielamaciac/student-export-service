@@ -4,3 +4,7 @@ server:
   port: 8083
 file:
   pathName: C:\Users\gabrielamaciac\Documents\GitHub\student-export
+validation-service:
+  url: http://localhost:8082/api/validation/student/
+student-service:
+  url: http://localhost:8081/api/student/

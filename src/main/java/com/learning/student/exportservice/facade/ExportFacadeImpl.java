@@ -1,6 +1,5 @@
 package com.learning.student.exportservice.facade;
 
-import com.learning.student.exportservice.integration.model.Student;
 import com.learning.student.exportservice.service.impl.ExportServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -15,7 +14,7 @@ public class ExportFacadeImpl implements ExportFacade {
     }
 
     @Override
-    public String exportStudent(Student student, String studentId) {
-        return exportService.exportStudent(student, studentId);
+    public String exportStudent(String studentId) {
+        return exportService.exportStudent(studentId);
     }
 }
