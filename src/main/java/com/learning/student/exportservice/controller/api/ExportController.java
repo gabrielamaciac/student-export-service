@@ -2,7 +2,6 @@ package com.learning.student.exportservice.controller.api;
 
 import com.learning.student.exportservice.facade.ExportFacade;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,15 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/export")
 @RestController
 @Slf4j
-public class ExportController {
+public class ExportController implements ExportApi {
 
     private final ExportFacade exportFacade;
-    private final ModelMapper modelMapper = new ModelMapper();
 
     public ExportController(ExportFacade exportFacade) {
         this.exportFacade = exportFacade;
     }
 
+    @Override
     @PostMapping("/student/{studentId}")
     public ResponseEntity<String> export(@PathVariable String studentId) {
         try {

@@ -12,7 +12,6 @@ import java.util.List;
 @Getter
 @Setter
 public class Grade {
-    //(discipline, date of grade, grade)
     private String subject;
     private List<Mark> marks;
 }

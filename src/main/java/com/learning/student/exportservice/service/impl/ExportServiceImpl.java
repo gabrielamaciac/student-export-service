@@ -1,5 +1,6 @@
 package com.learning.student.exportservice.service.impl;
 
+import com.learning.student.exportservice.exception.InvalidStudentException;
 import com.learning.student.exportservice.integration.gateway.StudentServiceGateway;
 import com.learning.student.exportservice.integration.gateway.ValidationServiceGateway;
 import com.learning.student.exportservice.integration.model.Student;
@@ -11,9 +12,6 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -44,7 +42,7 @@ public class ExportServiceImpl implements ExportService {
         if (isValid) {
             return export(student);
         } else {
-            throw new RuntimeException("Student is invalid");
+            throw new InvalidStudentException("Student is invalid");
         }
     }
 
@@ -60,29 +58,14 @@ public class ExportServiceImpl implements ExportService {
     private boolean validateStudent(Student student, String studentId) {
         List<ValidationDetail> validationDetails = validationServiceGateway.validateStudent(student, studentId);
         log.info("Validation details received: " + validationDetails.size());
-        if (validationDetails.size() <= 0) {
-            return true;
-        }
-        return false;
+        return validationDetails.isEmpty();
     }
 
     private String export(Student student) {
         Context context = new Context();
         context.setVariable("student", student);
         String content = springTemplateEngine.process("student", context);
-        writeToPath(content);
         log.info("Student was written to path: " + path);
         return content;
-    }
-
-    private void writeToPath(String content) {
-        try {
-            File filePath = File.createTempFile("student_", ".xml", new File(path));
-            PrintWriter writer = new PrintWriter(filePath, "UTF-8");
-            writer.print(content);
-            writer.close();
-        } catch (IOException e) {
-            log.error("Exception creating the file to specified path: " + e);
-        }
     }
 }
