@@ -25,13 +25,9 @@ public class ExportController implements ExportApi {
     @Override
     @PostMapping("/student/{studentId}")
     public ResponseEntity<String> export(@PathVariable String studentId) {
-        try {
-            HttpHeaders responseHeaders = new HttpHeaders();
-            responseHeaders.setContentType(MediaType.APPLICATION_XML);
-            String xmlContent = exportFacade.exportStudent(studentId);
-            return new ResponseEntity<>(xmlContent, responseHeaders, HttpStatus.OK);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
-        }
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.setContentType(MediaType.APPLICATION_XML);
+        String xmlContent = exportFacade.exportStudent(studentId);
+        return new ResponseEntity<>(xmlContent, responseHeaders, HttpStatus.OK);
     }
 }

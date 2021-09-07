@@ -13,6 +13,9 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
+/**
+ * Calls validation-service to get the validation details for the student.
+ */
 @Slf4j
 @Component
 public class ValidationServiceGateway {
@@ -24,11 +27,9 @@ public class ValidationServiceGateway {
 
     public List<ValidationDetail> validateStudent(Student student, String studentId) {
         HttpEntity<Student> request = new HttpEntity<>(student);
-        String validateByIdUrl = url + studentId;
-        final ParameterizedTypeReference<List<ValidationDetail>> typeRef = new ParameterizedTypeReference<>() {
-        };
+        ParameterizedTypeReference<List<ValidationDetail>> typeRef = new ParameterizedTypeReference<>() {};
         ResponseEntity<List<ValidationDetail>> response =
-                restTemplate.exchange(validateByIdUrl, HttpMethod.POST, request, typeRef);
+                restTemplate.exchange(url + studentId, HttpMethod.POST, request, typeRef);
         log.info("Validation service responded with: " + response.getStatusCodeValue());
         return response.getBody();
     }
