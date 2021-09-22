@@ -13,7 +13,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class InvalidStudentExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(InvalidStudentException.class)
     protected ResponseEntity<Object> handleConflict(final InvalidStudentException ex, final WebRequest request) {
-        log.error("InvalidStudentExceptionHandler caught exception: " + ex);
+        log.error("InvalidStudentExceptionHandler caught exception: ", ex);
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
     }
 }

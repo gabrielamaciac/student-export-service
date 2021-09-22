@@ -20,10 +20,14 @@ import java.util.List;
 @Component
 public class ValidationServiceGateway {
 
-    RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
 
     @Value("${validation-service.url}")
     private String url;
+
+    public ValidationServiceGateway(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
     public List<ValidationDetail> validateStudent(Student student, String studentId) {
         HttpEntity<Student> request = new HttpEntity<>(student);

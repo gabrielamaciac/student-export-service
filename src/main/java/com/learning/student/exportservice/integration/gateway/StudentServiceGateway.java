@@ -16,10 +16,14 @@ import java.util.NoSuchElementException;
 @Slf4j
 @Component
 public class StudentServiceGateway {
-    RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
 
     @Value("${student-service.url}")
     private String url;
+
+    public StudentServiceGateway(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
     public Student getStudentById(String studentId) {
         String getByIdUrl = url + studentId;

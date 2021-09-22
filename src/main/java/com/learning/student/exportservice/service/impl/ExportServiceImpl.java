@@ -8,8 +8,6 @@ import com.learning.student.exportservice.integration.model.ValidationDetail;
 import com.learning.student.exportservice.service.ExportService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.thymeleaf.context.Context;
-import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import java.util.List;
 
@@ -19,13 +17,13 @@ public class ExportServiceImpl implements ExportService {
 
     private final StudentServiceGateway studentServiceGateway;
     private final ValidationServiceGateway validationServiceGateway;
-    private final SpringTemplateEngine springTemplateEngine;
+    private final ProcessService processService;
 
     public ExportServiceImpl(StudentServiceGateway studentServiceGateway, ValidationServiceGateway validationServiceGateway,
-                             SpringTemplateEngine springTemplateEngine) {
+                             ProcessService processService) {
         this.studentServiceGateway = studentServiceGateway;
         this.validationServiceGateway = validationServiceGateway;
-        this.springTemplateEngine = springTemplateEngine;
+        this.processService = processService;
     }
 
     @Override
@@ -34,7 +32,7 @@ public class ExportServiceImpl implements ExportService {
         boolean isValid = validateStudent(student, studentId);
         log.info("Student is valid: " + isValid);
         if (isValid) {
-            return export(student);
+            return processService.processStudent(student);
         } else {
             throw new InvalidStudentException("Student is invalid");
         }
@@ -44,11 +42,5 @@ public class ExportServiceImpl implements ExportService {
         List<ValidationDetail> validationDetails = validationServiceGateway.validateStudent(student, studentId);
         log.info("Validation details received: " + validationDetails.size());
         return validationDetails.isEmpty();
-    }
-
-    private String export(Student student) {
-        Context context = new Context();
-        context.setVariable("student", student);
-        return springTemplateEngine.process("student", context);
     }
 }
