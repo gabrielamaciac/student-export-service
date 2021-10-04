@@ -8,7 +8,10 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -29,6 +32,7 @@ public class ValidationServiceGateway {
         this.restTemplate = restTemplate;
     }
 
+    @Retryable(value = {HttpClientErrorException.class}, maxAttempts = 4, backoff = @Backoff(1000))
     public List<ValidationDetail> validateStudent(Student student, String studentId) {
         HttpEntity<Student> request = new HttpEntity<>(student);
         ParameterizedTypeReference<List<ValidationDetail>> typeRef = new ParameterizedTypeReference<>() {};
